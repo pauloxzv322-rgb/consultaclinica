@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Clínica - Pacientes</title>
+</head>
+<body>
+    <h1>Lista de Pacientes Cadastrados</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>CPF</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="p : ${pacientes}">
+                <td th:text="${p.id}"></td>
+                <td th:text="${p.nome}"></td>
+                <td th:text="${p.cpf}"></td>
+            </tr>
+        </tbody>
+    </table>
+    <br>
+    <a href="/h2-console">Acessar Banco de Dados</a>
+</body>
+</html>

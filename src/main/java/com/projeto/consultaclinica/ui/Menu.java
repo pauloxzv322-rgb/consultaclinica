@@ -12,7 +12,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Scanner;
 
-@Component // Diz ao Spring que esta classe faz parte do projeto
+@Component // teste Diz ao Spring que esta classe faz parte do projeto
 public class Menu {
 
     @Autowired

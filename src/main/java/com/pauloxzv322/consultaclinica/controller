@@ -1,0 +1,20 @@
+package com.projeto.consultaclinica.controller; // Note o .controller no fim
+
+import com.projeto.consultaclinica.repository.PacienteRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+
+@Controller // <--- Certifique-se que não é @RestController
+public class PacienteWebController {
+
+    @Autowired
+    private PacienteRepository repository;
+
+    @GetMapping("/web/pacientes")
+    public String listarPacientes(Model model) {
+        model.addAttribute("pacientes", repository.findAll());
+        return "lista-pacientes"; 
+    }
+}
