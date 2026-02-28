@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Cadastro de Paciente</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 50px; line-height: 1.6; }
+        .container { max-width: 400px; background: #f4f4f4; padding: 20px; border-radius: 8px; }
+        input { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        button { background-color: #28a745; color: white; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; width: 100%; }
+        button:hover { background-color: #218838; }
+        a { display: block; margin-top: 15px; color: #007bff; text-decoration: none; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Novo Cadastro de Paciente</h2>
+        
+        <form th:action="@{/salvar}" th:object="${paciente}" method="POST">
+            
+            <label for="nome">Nome Completo:</label>
+            <input type="text" th:field="*{nome}" id="nome" placeholder="Digite o nome" required>
+            
+            <label for="cpf">CPF:</label>
+            <input type="text" th:field="*{cpf}" id="cpf" placeholder="000.000.000-00" required>
+            
+            <button type="submit">Salvar Paciente</button>
+        </form>
+        
+        <a href="/lista">← Voltar para a Lista</a>
+    </div>
+
+</body>
+</html>
