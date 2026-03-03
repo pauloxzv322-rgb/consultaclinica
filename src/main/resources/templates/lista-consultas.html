@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista de Consultas</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Agenda de Consultas</h2>
+        <div>
+            <a th:href="@{/consultas/nova}" class="btn btn-success">Agendar Nova</a>
+            <a th:href="@{/lista}" class="btn btn-outline-primary">Ver Pacientes</a>
+        </div>
+    </div>
+
+    <table class="table table-striped table-bordered shadow-sm">
+    <thead class="table-dark">
+        <tr>
+            <th>Paciente</th>
+            <th>Data e Horário</th>
+            <th>Ações</th> </tr>
+    </thead>
+    <tbody>
+        <tr th:each="c : ${consultas}">
+            <td th:text="${c.paciente.nome}"></td>
+            <td th:text="${#temporals.format(c.dataHora, 'dd/MM/yyyy HH:mm')}"></td>
+            <td>
+                <a th:href="@{/consultas/excluir/{id}(id=${c.id})}" 
+                   class="btn btn-danger btn-sm"
+                   onclick="return confirm('Deseja realmente cancelar esta consulta?')">
+                   Cancelar
+                </a>
+            </td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(consultas)}">
+            <td colspan="3" class="text-center text-muted p-4">Nenhuma consulta agendada no momento.</td>
+        </tr>
+    </tbody>
+</table>
+</body>
+</html>
