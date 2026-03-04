@@ -11,22 +11,31 @@
             <div class="card-header bg-info text-white text-center py-3" style="border-radius: 15px 15px 0 0;">
                 <h4 class="mb-0">Novo Agendamento</h4>
             </div>
+            
             <div class="card-body p-4">
                 <form th:action="@{/consultas/salvar}" th:object="${consulta}" method="post">
+                    
                     <div class="mb-3">
                         <label class="form-label fw-bold">Selecione o Paciente:</label>
                         <select th:field="*{paciente}" class="form-select" required>
                             <option value="">Escolha um paciente da lista...</option>
-                            <option th:each="p : ${pacientes}" th:value="${p.id}" th:text="${p.nome}"></option>
+                            <option th:each="p : ${pacientes}" 
+                                    th:value="${p.id}" 
+                                    th:text="${p.nome}">
+                            </option>
                         </select>
                     </div>
+
                     <div class="mb-4">
                         <label class="form-label fw-bold">Data e Horário:</label>
                         <input type="datetime-local" th:field="*{dataHora}" class="form-control" required>
                     </div>
+
                     <div class="d-grid gap-2">
-                        <button type="submit" class="btn btn-info text-white btn-lg">Confirmar Agendamento</button>
-                        <a href="/" class="btn btn-link text-muted">Voltar</a>
+                        <button type="submit" class="btn btn-info text-white btn-lg shadow-sm">
+                            Confirmar Agendamento
+                        </button>
+                        <a th:href="@{/consultas}" class="btn btn-link text-muted">Cancelar e Voltar</a>
                     </div>
                 </form>
             </div>

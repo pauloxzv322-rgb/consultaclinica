@@ -3,52 +3,57 @@ package com.projeto.consultaclinica.controller;
 import com.projeto.consultaclinica.model.Consulta;
 import com.projeto.consultaclinica.repository.ConsultaRepository;
 import com.projeto.consultaclinica.repository.PacienteRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-@RequestMapping("/consultas")
 public class ConsultaWebController {
 
-    @Autowired
-    private ConsultaRepository consultaRepository;
+    private final ConsultaRepository consultaRepository;
+    private final PacienteRepository pacienteRepository;
 
-    @Autowired
-    private PacienteRepository pacienteRepository;
+    public ConsultaWebController(ConsultaRepository consultaRepository,
+                                 PacienteRepository pacienteRepository) {
+        this.consultaRepository = consultaRepository;
+        this.pacienteRepository = pacienteRepository;
+    }
 
-    // Listar todas as consultas
-    @GetMapping
+    // Rota para a Página Inicial (index.html que está em static)
+    @GetMapping("/")
+    public String home() {
+        return "forward:/index.html";
+    }
+
+    // Listagem de Consultas
+    @GetMapping("/consultas")
     public String listar(Model model) {
         model.addAttribute("consultas", consultaRepository.findAll());
         return "lista-consultas";
     }
 
-    // Exibir formulário de agendamento
-    @GetMapping("/nova")
+    // Atalho caso você digite /lista no navegador
+    @GetMapping("/lista")
+    public String listarAlias() {
+        return "redirect:/consultas";
+    }
+
+    // Formulário de Agendamento
+    @GetMapping("/consultas/nova")
     public String exibirFormulario(Model model) {
-        // Criamos um objeto vazio para o Thymeleaf preencher
-        Consulta consulta = new Consulta();
-        model.addAttribute("consulta", consulta);
-        
-        // Buscamos todos os pacientes para o <select> do HTML
+        model.addAttribute("consulta", new Consulta());
         model.addAttribute("pacientes", pacienteRepository.findAll());
-        
         return "agendar-consulta";
     }
 
-    // Salvar agendamento
-    @PostMapping("/salvar")
+    @PostMapping("/consultas/salvar")
     public String salvar(@ModelAttribute("consulta") Consulta consulta) {
-        // O Spring vincula automaticamente o ID do paciente selecionado ao objeto Consulta
         consultaRepository.save(consulta);
         return "redirect:/consultas";
-    } // <-- Chave que fecha o método salvar adicionada aqui
+    }
 
-    // Método excluir agora fora do salvar e dentro da classe
-    @GetMapping("/excluir/{id}")
-    public String excluir(@PathVariable("id") Long id) {
+    @GetMapping("/consultas/excluir/{id}")
+    public String excluir(@PathVariable Long id) {
         consultaRepository.deleteById(id);
         return "redirect:/consultas";
     }

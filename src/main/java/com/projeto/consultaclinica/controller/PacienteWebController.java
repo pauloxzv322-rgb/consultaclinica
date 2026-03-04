@@ -2,44 +2,53 @@ package com.projeto.consultaclinica.controller;
 
 import com.projeto.consultaclinica.model.Paciente;
 import com.projeto.consultaclinica.repository.PacienteRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-@RequestMapping("/pacientes") // Endereço base: /pacientes
+@RequestMapping("/pacientes")
 public class PacienteWebController {
 
-    @Autowired
-    private PacienteRepository repository;
+    private final PacienteRepository pacienteRepository;
 
-    // LISTAR: http://localhost:8086/pacientes
+    public PacienteWebController(PacienteRepository pacienteRepository) {
+        this.pacienteRepository = pacienteRepository;
+    }
+
+    // LISTAR PACIENTES
     @GetMapping
     public String listar(Model model) {
-        model.addAttribute("pacientes", repository.findAll());
+        model.addAttribute("pacientes", pacienteRepository.findAll());
         return "lista-pacientes";
     }
 
-    // FORMULÁRIO: http://localhost:8086/pacientes/novo
+    // FORMULÁRIO DE CADASTRO
     @GetMapping("/novo")
     public String exibirFormulario(Model model) {
-        model.addAttribute("paciente", new Paciente()); 
-        return "cadastro";
+        model.addAttribute("paciente", new Paciente());
+        return "cadastro-paciente";
     }
 
-    // SALVAR: http://localhost:8086/pacientes/salvar
+    // SALVAR PACIENTE
     @PostMapping("/salvar")
-    public String salvarPaciente(@ModelAttribute("paciente") Paciente paciente) {
-        repository.save(paciente);
-        // Redireciona para /pacientes (o método listar acima)
-        return "redirect:/pacientes"; 
+    public String salvar(@ModelAttribute("paciente") Paciente paciente) {
+        pacienteRepository.save(paciente);
+        return "redirect:/pacientes";
     }
 
-    // EXCLUIR: http://localhost:8086/pacientes/excluir/{id}
+    // EDITAR PACIENTE
+    @GetMapping("/editar/{id}")
+    public String editar(@PathVariable Long id, Model model) {
+        Paciente paciente = pacienteRepository.findById(id).orElseThrow();
+        model.addAttribute("paciente", paciente);
+        return "cadastro-paciente";
+    }
+
+    // EXCLUIR PACIENTE
     @GetMapping("/excluir/{id}")
-    public String excluir(@PathVariable("id") Long id) {
-        repository.deleteById(id);
+    public String excluir(@PathVariable Long id) {
+        pacienteRepository.deleteById(id);
         return "redirect:/pacientes";
     }
 }
